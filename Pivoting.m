@@ -1,20 +1,21 @@
 function Perm = Pivoting(A)
     [n,~] = size(A);
-    Perm = zeros(1,n);
-    S = zeros(1,n);
-    for i = 1 : n
-        Perm(i) = i;
-        S(i) = max(abs(A(i,1:n)));
-    end
+    Perm(1,1:n) = 1:n;
+    S = max(abs(A'));
     for k = 1 : n-1
         for j = k : n
-            if( abs(A(Perm(j),k))/S(Perm(j)) >= abs(A(Perm(i),k))/S(Perm(i)) )
-                break
+            for i = k : n
+                if( abs(A(Perm(j),k))/S(Perm(j)) < abs(A(Perm(i),k))/S(Perm(i)) )
+                    break
+                end
+                if i == n
+                    pivot = j;
+                end
             end
         end
         tmp = Perm(k);
-        Perm(k) = Perm(j);
-        Perm(j) = tmp;
+        Perm(k) = Perm(pivot);
+        Perm(pivot) = tmp;
         for i = k+1 : n
             z = A(Perm(i),k)/A(Perm(k),k);
             A(Perm(i),k) = z;
